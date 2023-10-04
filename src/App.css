@@ -36,3 +36,20 @@
     transform: rotate(360deg);
   }
 }
+
+
+.error {
+  border: 1px red solid;
+}
+
+.error-message {
+  color: red;
+}
+
+.active-filter {
+  background-color: aquamarine;
+}
+
+.task-grey {
+  opacity: .5;
+}
