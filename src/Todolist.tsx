@@ -12,10 +12,11 @@ type PropsType = {
     title: string
     tasks: TaskType[]
     filter: FilterValuesType
-    removeTask: (id: string) => void;
-    addTask: (title: string) => void
+    removeTodolist: (todolistId: string) => void
+    removeTask: (todolistId: string, id: string) => void;
+    addTask: (todolistId: string, title: string) => void
     changeFilter: (todolistId: string, value: FilterValuesType) => void
-    changeStatus: (taskId: string, isDone: boolean) => void
+    changeStatus: (todolistId: string, taskId: string, isDone: boolean) => void
 }
 
 export const Todolist = (props: PropsType) => {
@@ -40,7 +41,7 @@ export const Todolist = (props: PropsType) => {
     const addTask = () => {
 
         if (newTaskTitle.trim() !== '') {
-            props.addTask(newTaskTitle.trim());
+            props.addTask(props.todolistId, newTaskTitle.trim());
             setNewTaskTitle('');
         } else {
             setError('Title is required');
@@ -55,9 +56,11 @@ export const Todolist = (props: PropsType) => {
 
     const onCompletedClickHandler = () => props.changeFilter(props.todolistId, 'completed');
 
+    const onRemoveTodolistHandler = () => props.removeTodolist(props.todolistId);
+
     return (
         <div>
-            <h3>{props.title}</h3>
+            <h3>{props.title}<button onClick={onRemoveTodolistHandler}>X</button></h3>
             <div>
                 <input
                     value={newTaskTitle}
@@ -72,10 +75,10 @@ export const Todolist = (props: PropsType) => {
                 {
                     props.tasks.map(task => {
 
-                        const onRemoveHandler = () => props.removeTask(task.id);
+                        const onRemoveHandler = () => props.removeTask(props.todolistId, task.id);
 
                         const changeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                            props.changeStatus(task.id, e.currentTarget.checked);
+                            props.changeStatus(props.todolistId, task.id, e.currentTarget.checked);
                         }
 
                         return <li key={task.id} className={task['isDone'] ? 'task-grey' : ''}><input
