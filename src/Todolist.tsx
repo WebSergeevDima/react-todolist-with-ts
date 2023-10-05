@@ -8,12 +8,13 @@ export type TaskType = {
 }
 
 type PropsType = {
-    title: string,
+    todolistId: string
+    title: string
     tasks: TaskType[]
     filter: FilterValuesType
     removeTask: (id: string) => void;
     addTask: (title: string) => void
-    changeFilter: (value: FilterValuesType) => void
+    changeFilter: (todolistId: string, value: FilterValuesType) => void
     changeStatus: (taskId: string, isDone: boolean) => void
 }
 
@@ -31,14 +32,14 @@ export const Todolist = (props: PropsType) => {
 
         setError(null);
 
-        if(e.ctrlKey && e.key === 'Enter') {
+        if (e.ctrlKey && e.key === 'Enter') {
             addTask();
         }
     }
 
     const addTask = () => {
 
-        if(newTaskTitle.trim() !== '') {
+        if (newTaskTitle.trim() !== '') {
             props.addTask(newTaskTitle.trim());
             setNewTaskTitle('');
         } else {
@@ -48,11 +49,11 @@ export const Todolist = (props: PropsType) => {
 
     }
 
-    const onAllClickHandler = () => props.changeFilter('all');
+    const onAllClickHandler = () => props.changeFilter(props.todolistId, 'all');
 
-    const onActiveClickHandler = () => props.changeFilter('active');
+    const onActiveClickHandler = () => props.changeFilter(props.todolistId, 'active');
 
-    const onCompletedClickHandler = () => props.changeFilter('completed');
+    const onCompletedClickHandler = () => props.changeFilter(props.todolistId, 'completed');
 
     return (
         <div>
@@ -73,21 +74,27 @@ export const Todolist = (props: PropsType) => {
 
                         const onRemoveHandler = () => props.removeTask(task.id);
 
-                        const changeStatusHandler = (e:ChangeEvent<HTMLInputElement>) => {
+                        const changeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
                             props.changeStatus(task.id, e.currentTarget.checked);
                         }
 
-                        return <li key={task.id} className={task['isDone'] ? 'task-grey' : '' }><input onChange={changeStatusHandler} type="checkbox"
-                                                        checked={task['isDone']}/><span>{task['title']}</span>
+                        return <li key={task.id} className={task['isDone'] ? 'task-grey' : ''}><input
+                            onChange={changeStatusHandler} type="checkbox"
+                            checked={task['isDone']}/><span>{task['title']}</span>
                             <button onClick={onRemoveHandler}>X</button>
                         </li>
                     })
                 }
             </ul>
             <div>
-                <button className={props.filter === 'all' ? 'active-filter' : ''} onClick={onAllClickHandler}>All</button>
-                <button className={props.filter === 'active' ? 'active-filter' : ''} onClick={onActiveClickHandler}>Active</button>
-                <button className={props.filter === 'completed' ? 'active-filter' : ''} onClick={onCompletedClickHandler}>Completed</button>
+                <button className={props.filter === 'all' ? 'active-filter' : ''} onClick={onAllClickHandler}>All
+                </button>
+                <button className={props.filter === 'active' ? 'active-filter' : ''}
+                        onClick={onActiveClickHandler}>Active
+                </button>
+                <button className={props.filter === 'completed' ? 'active-filter' : ''}
+                        onClick={onCompletedClickHandler}>Completed
+                </button>
             </div>
         </div>
     )
