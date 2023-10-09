@@ -85,11 +85,35 @@ function App() {
 
     }
 
+    const changeTitle = (todolistId: string, taskId: string, title: string) => {
+
+        const tasks = allTasks[todolistId];
+        const task = tasks.find(task => task.id === taskId);
+
+        if (task) {
+            task.title = title;
+            setAllTasks({...allTasks});
+        }
+
+    }
+
+    const changeTodolistTitle = (todolistId: string, title: string) => {
+
+        const todolist = todolists.find(todolist => todolist.id === todolistId);
+
+        if (todolist) {
+            todolist.title = title;
+            setTodolists([...todolists]);
+        }
+
+    }
+
     const addTodolist = (title: string) => {
         const todolistId = v1();
         setTodolists([{id: todolistId, title: title, filter: 'all'}, ...todolists]);
         setAllTasks({...allTasks, [todolistId]: []})
     }
+
 
     return (
         <div className="App">
@@ -118,7 +142,9 @@ function App() {
                         removeTask={removeTask}
                         changeFilter={changeFilter}
                         addTask={addTask}
-                        changeStatus={changeStatus}/>;
+                        changeStatus={changeStatus}
+                        changeTitle={changeTitle}
+                        changeTodolistTitle={changeTodolistTitle} />;
                 })
             }
 
